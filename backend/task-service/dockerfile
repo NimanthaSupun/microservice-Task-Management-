@@ -1,0 +1,22 @@
+
+# todo: use official base image
+FROM python:3.11-slim
+
+# todo:set directory
+WORKDIR /app
+
+# todo:copy requirements.txt
+COPY requirements.txt .
+
+# todo: install the dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# todo:copy the rest of the application code
+COPY . .
+
+# todo:tell docker witch port the app runs on
+EXPOSE 8000
+
+# todo:the command to run the app when the container start
+CMD [ "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+

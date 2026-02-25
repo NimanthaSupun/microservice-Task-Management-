@@ -13,20 +13,28 @@ r = redis.from_url(REDIS_URL)
 
 def process_notification():
     print("Notification service started, waiting for message....")
-
-  # We use a 'pubsub' model or a simple 'list' (Queue)
-    # Let's use a list for a reliable queue (RPOP/BLPOP)
+    
+    # Wait for Redis to be ready
     while True:
-        # BLPOP 'blocks' until a message is available in the 'notifications' queue
-        message = r.blpop("task_notifications",timeout=0)
+        try:
+            r.ping()
+            print("Successfully connected to Redis!")
+            break
+        except Exception as e:
+            print(f"Waiting for Redis... ({e})")
+            time.sleep(2)
 
-        if message:
-            # message is a tuple(queue_name,data)
-            task_data = json.loads(message[1])
-            print(f"[notify] sending notification for task: {task_data['title']}")
-            # Here you would normally send an email/SMS
-            time.sleep(2) # simulate task
-            print(f"[DONE] notification sent!")
+    while True:
+        try:
+            message = r.blpop("task_notifications", timeout=0)
+            if message:
+                task_data = json.loads(message[1])
+                print(f"[notify] sending notification for task: {task_data['title']}")
+                time.sleep(2)
+                print(f"[DONE] notification sent!")
+        except Exception as e:
+            print(f"Connection lost, retrying... ({e})")
+            time.sleep(2)
 
 if __name__ == "__main__":
     process_notification()

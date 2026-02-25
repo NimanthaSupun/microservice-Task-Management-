@@ -20,3 +20,6 @@ redis_data/
 # IDEs
 .vscode/
 .idea/
+
+# Project documentation
+implementation_plan.md

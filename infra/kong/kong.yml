@@ -9,5 +9,3 @@ services:
       - name: task-routes
         paths:
           - /api/tasks
-
-`

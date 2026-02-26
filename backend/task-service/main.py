@@ -1,5 +1,6 @@
 import os
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from motor.motor_asyncio import AsyncIOMotorClient
 import redis
@@ -7,6 +8,15 @@ import json
 
 
 app = FastAPI(title="Task service")
+
+# Enable CORS for the frontend
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], # In production, replace with your frontend URL
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # todo: connectd to mongoDB
 MONGO_URL = os.getenv("MONGO_URL","mongodb://localhost:27017")

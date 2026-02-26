@@ -1,11 +1,11 @@
 _format_version: "3.0"
 _transform: true
 
-
 services:
-  - name : task-services
+  - name: task-service
     url: http://task-service:8000
     routes:
-      - name: task-routes
+      - name: task-route
         paths:
-          - /api/tasks
+          - /api
+        strip_path: true 

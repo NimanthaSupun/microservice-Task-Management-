@@ -5,9 +5,10 @@ from pydantic import BaseModel
 from motor.motor_asyncio import AsyncIOMotorClient
 import redis
 import json
-
+from prometheus_fastapi_instrumentator import Instrumentator
 
 app = FastAPI(title="Task service")
+Instrumentator().instrument(app).expose(app)
 
 # Enable CORS for the frontend
 app.add_middleware(
